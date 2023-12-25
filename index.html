@@ -24,6 +24,7 @@
 	// Game World
 	var gridSize = tileSize = 20;
 	var nextX = (nextY = 0);
+	var score = 0;
 
 	// Apple
 	var appleX = (appleY = 15);
@@ -42,6 +43,16 @@
 			setInterval(draw, 1000 / x);
 		};
 
+
+		// set a score on the top right of screen
+		// function score() {
+		// 	var score = 0;
+		// 	ctx.font = "16px Arial";
+		// 	ctx.fillStyle = "#000000";
+		// 	ctx.fillText("Score: " + score, 8, 20);
+		// }
+
+	
 	// Draw Function
 		function draw() {
 			// move snake to next position
@@ -62,9 +73,11 @@
 			snakeY = 0;
 		}
 		
+		
 		// Snake bite apple?
 		if (snakeX == appleX && snakeY == appleY) {
 			tailSize++;
+			score++;
 			appleX = Math.floor(Math.random() * gridSize);
 			appleY = Math.floor(Math.random() * gridSize);
 		}
@@ -72,6 +85,12 @@
 		// Setting Background Color
 		ctx.fillStyle = 'black';
 		ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+		// setting score board at top right of screen
+		ctx.font = "16px Arial";
+		ctx.fillStyle = "#FFFFFF";
+		ctx.fillText("Score: " + score, 8, 20);
+
 		
 		// Setting Snakes Color
 		ctx.fillStyle = 'green';
