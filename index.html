@@ -1,204 +1,214 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<title>Snake The Game</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Snake The Game</title>
 </head>
 
 <body>
-	<canvas id="canvas" width="400" height="400"></canvas>
-	
-	
-<script>
-// Set Global Variables
-	var canvas, ctx;
+    <canvas id="canvas" width="400" height="400"></canvas>
 
-	// Snake
-	var defaultTailSize = 3;
-	var tailSize = defaultTailSize;
-	var snakeTrail = [];
-	var snakeX = (snakeY = 10);
+    <script>
+        // Set Global Variables
+        var canvas, ctx;
 
-	// Game World
-	var gridSize = tileSize = 20;
-	var nextX = (nextY = 0);
-	var score = 0;
-	var lives_remaining = 3;
+        // Snake
+        var defaultTailSize = 3;
+        var tailSize = defaultTailSize;
+        var snakeTrail = [];
+        var snakeX = (snakeY = 10);
 
-	// Apple
-	var appleX = (appleY = 15);
+        // Game World
+        var gridSize = tileSize = 20;
+        var nextX = (nextY = 0);
+        var score = 0;
+        var lives_remaining = 3;
 
-	// Game State
-	var gameState = false;
-	var snakeMoving = false;
+        // Apple
+        var appleX = (appleY = 15);
 
-	
-	
+        // Game State
+        var gameState = false;
+        var snakeMoving = false;
 
-	// Set first function get canvas and ctx on window load
-	window.onload = function() {
-		canvas = document.getElementById("canvas");
-		ctx = canvas.getContext("2d");
-		
-		// Add Event Listener		
-		document.addEventListener("keydown", keyDownEvent);
-		
-		var x = 8;
+        // Game Interval
+        var gameInterval;
 
-		// Call startScreen Function
-		startScreen();
-		
-		var gameInterval;
+        // Set first function to get canvas and ctx on window load
+        window.onload = function () {
+            canvas = document.getElementById("canvas");
+            ctx = canvas.getContext("2d");
 
-		// Define Start Game Function
-		function startGame() {
-			gameInterval = setInterval(draw, 1000 / x);
-		}
-	
-		// Input Function
-		function keyDownEvent(e) {
-			if (e.keyCode == 32) {
-				if (!gameState)
-					gameState = true;
-					startGame();
-			} else {
-				switch (e.keyCode) {
-					case 37:
-						nextX = -1;
-						nextY = 0;
-						break;
-					case 38:
-						console.log
-						nextX = 0;
-						nextY = -1;
-						break;
-					case 39:
-						nextX = 1;
-						nextY = 0;
-						break;
-					case 40:
-						nextX = 0;
-						nextY = 1;
-						break;
-				}
-				snakeMoving = true;
-			}
-		}
+            // Add Event Listener		
+            document.addEventListener("keydown", keyDownEvent);
 
-	};
+            var x = 8;
 
-	
-	// Define Screen Function
-	function startScreen() {
-		ctx.fillStyle = 'white';
-		ctx.fillRect(0, 0, canvas.width, canvas.height);
-		ctx.font = "16px Arial";
-		ctx.fillStyle = "#000000";
-		ctx.fillText("Press Space to Start", 8, 20);
-	}
-	
+            // Call startScreen Function
+            startScreen();
+
+            // Define Start Game Function
+            function startGame() {
+                gameInterval = setInterval(draw, 1000 / x);
+            }
+
+            // Input Function
+            function keyDownEvent(e) {
+                if (e.keyCode == 32) {
+                    if (!gameState) {
+                        gameState = true;
+                    	startGame();
+					}
+				} else if (!gameState && (e.keyCode == 49 || e.keyCode == 50)) {
+					
+					if (e.keyCode == 49) {
+						gameState = true;
+						startGame();
+				
+					} else if (e.keyCode == 50) {
+						window.close();
+					}
+				} else {
+                    switch (e.keyCode) {
+                        case 37:
+                            nextX = -1;
+                            nextY = 0;
+                            break;
+                        case 38:
+                            console.log
+                            nextX = 0;
+                            nextY = -1;
+                            break;
+                        case 39:
+                            nextX = 1;
+                            nextY = 0;
+                            break;
+                        case 40:
+                            nextX = 0;
+                            nextY = 1;
+                            break;
+                    }
+                    snakeMoving = true;
+                }
+            }
+        };
 
 
+        // Define Screen Function
+        function startScreen() {
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.font = "16px Arial";
+            ctx.fillStyle = "#000000";
+            ctx.fillText("Press Space to Start", 8, 20);
+        }
 
-	// Define Draw Function
-	function draw() {
+        // Define Game Over Function
+        function gameOverScreen() {
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.font = "16px Arial";
+            ctx.fillStyle = "#FF0000";
+            ctx.fillText("Game Over! To play again press 1. To exit press 2", 8, 20);
+        }
 
+        // Define Draw Function
+        function draw() {
 
-		if (!gameState) {
-			startScreen();
-			return;
-		}
-		// move snake to next position
-		snakeX += nextX;
-		snakeY += nextY;
-		
-		// Handle Snake Collision with Wall
-		if (snakeX < 0) {
-			snakeX = gridSize -1;
-		}
-		if (snakeX > gridSize -1) {
-			snakeX = 0;
-		}
-		if (snakeY < 0) {
-			snakeY = gridSize -1;
-		}
-		if (snakeY > gridSize -1) {
-			snakeY = 0;
-		}
-		
-		// Handle Snake Collision with Apple
-		if (snakeX == appleX && snakeY == appleY) {
-			tailSize++;
-			score++;
-			appleX = Math.floor(Math.random() * gridSize);
-			appleY = Math.floor(Math.random() * gridSize);
-		}
+            if (!gameState) {
+                startScreen();
+                return;
+            }
+            // move snake to the next position
+            snakeX += nextX;
+            snakeY += nextY;
 
-		// Setting Background Color
-		ctx.fillStyle = 'black';
-		ctx.fillRect(0, 0, canvas.width, canvas.height);
+            // Handle Snake Collision with Wall
+            if (snakeX < 0) {
+                snakeX = gridSize - 1;
+            }
+            if (snakeX > gridSize - 1) {
+                snakeX = 0;
+            }
+            if (snakeY < 0) {
+                snakeY = gridSize - 1;
+            }
+            if (snakeY > gridSize - 1) {
+                snakeY = 0;
+            }
 
-		// Score counter display
-		ctx.font = "16px Arial";
-		ctx.fillStyle = "#FFFFFF";
-		ctx.fillText("Score: " + score, 8, 20);
+            // Handle Snake Collision with Apple
+            if (snakeX == appleX && snakeY == appleY) {
+                tailSize++;
+                score++;
+                appleX = Math.floor(Math.random() * gridSize);
+                appleY = Math.floor(Math.random() * gridSize);
+            }
 
-		// Life counter display
-		ctx.font = "16px Arial";
-		ctx.fillStyle = "#FFFFFF";
-		ctx.fillText("Lives: " + lives_remaining, 8, 40);
-		
-		// Setting Snakes Color
-		ctx.fillStyle = 'green';
-		if (snakeMoving) {
-			for (var i = 0; i < snakeTrail.length; i++) {
-				ctx.fillRect(
-					snakeTrail[i].x * tileSize,
-					snakeTrail[i].y * tileSize,
-					tileSize,
-					tileSize
-				);
-			
-				// Snake interacts with its tail
-				if (snakeTrail[i].x == snakeX && snakeTrail[i].y == snakeY) {
-					tailSize = defaultTailSize;
-					score = 0;
-					lives_remaining--;
-					snakeMoving = false;
-				}
+            // Setting Background Color
+            ctx.fillStyle = 'black';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+            // Score counter display
+            ctx.font = "16px Arial";
+            ctx.fillStyle = "#FFFFFF";
+            ctx.fillText("Score: " + score, 8, 20);
 
-			}
-		}
-		// if (score == 0) {
-		// 	lives_remaining--;
-		// }
+            // Life counter display
+            ctx.font = "16px Arial";
+            ctx.fillStyle = "#FFFFFF";
+            ctx.fillText("Lives: " + lives_remaining, 8, 40);
 
+            // Setting Snakes Color
+            ctx.fillStyle = 'green';
+            if (snakeMoving) {
+                for (var i = 0; i < snakeTrail.length; i++) {
+                    ctx.fillRect(
+                        snakeTrail[i].x * tileSize,
+                        snakeTrail[i].y * tileSize,
+                        tileSize,
+                        tileSize
+                    );
 
-		// Gameover when lives_remaining = 0
-		if (lives_remaining == 0) {
-			clearInterval(gameInterval);
-			gameState = false;
-			startScreen();
-			lives_remaining = 3;
-			score = 0;
-		}
-		
-		// Set Apple Color
-		ctx.fillStyle = 'red';
-		ctx.fillRect(appleX * tileSize, appleY * tileSize, tileSize, tileSize);
-		
-		// Set Snake Trail
-		snakeTrail.push({ x: snakeX, y: snakeY });
-		
-		while (snakeTrail.length > tailSize) {
-			snakeTrail.shift();
-		}
-	}
-	
-// End of Functions
-</script>
+                    // Snake interacts with its tail
+                    if (snakeTrail[i].x == snakeX && snakeTrail[i].y == snakeY) {
+                        tailSize = defaultTailSize;
+                        score = 0;
+                        lives_remaining--;
+                        snakeMoving = false;
+                    }
+                }
+            }
+
+            // Gameover when lives_remaining = 0
+            if (lives_remaining == 0) {
+                clearInterval(gameInterval);
+                gameState = false;
+                gameOverScreen();
+                lives_remaining = 3;
+                score = 0;
+                snakeMoving = false;
+            }
+
+            // Set Apple Color
+            ctx.fillStyle = 'red';
+            ctx.fillRect(appleX * tileSize, appleY * tileSize, tileSize, tileSize);
+
+            // Set Snake Trail
+            snakeTrail.push({
+                x: snakeX,
+                y: snakeY
+            });
+
+            while (snakeTrail.length > tailSize) {
+                snakeTrail.shift();
+            }
+        }
+
+    </script>
 </body>
+
 </html>
