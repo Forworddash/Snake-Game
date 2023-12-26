@@ -25,12 +25,14 @@
 	var gridSize = tileSize = 20;
 	var nextX = (nextY = 0);
 	var score = 0;
+	var lives_remaining = 3;
 
 	// Apple
 	var appleX = (appleY = 15);
 
 	// Game State
 	var gameState = false;
+	
 	
 
 	// Set first function get canvas and ctx on window load
@@ -100,6 +102,7 @@
 	// Define Draw Function
 	function draw() {
 
+
 		if (!gameState) {
 			startScreen();
 			return;
@@ -134,11 +137,15 @@
 		ctx.fillStyle = 'black';
 		ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-		// Score System
+		// Score counter display
 		ctx.font = "16px Arial";
 		ctx.fillStyle = "#FFFFFF";
 		ctx.fillText("Score: " + score, 8, 20);
 
+		// Life counter display
+		ctx.font = "16px Arial";
+		ctx.fillStyle = "#FFFFFF";
+		ctx.fillText("Lives: " + lives_remaining, 8, 40);
 		
 		// Setting Snakes Color
 		ctx.fillStyle = 'green';
@@ -154,8 +161,19 @@
 			// Snake interacts with its tail
 			if (snakeTrail[i].x == snakeX && snakeTrail[i].y == snakeY) {
 				tailSize = defaultTailSize;
-				score = 0;
+				// score = 0;
+				// lives_remaining--;
 			}
+
+		}
+
+		// Gameover when lives_remaining = 0
+		if (lives_remaining == 0) {
+			clearInterval(gameInterval);
+			gameState = false;
+			startScreen();
+			lives_remaining = 3;
+			score = 0;
 		}
 		
 		// Set Apple Color
