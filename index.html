@@ -28,38 +28,92 @@
 
 	// Apple
 	var appleX = (appleY = 15);
-	
-// End of Global Variables 
 
-// Start of Functions
+	// Game State
+	var gameState = false;
+	
+
 	// Set first function get canvas and ctx on window load
-		window.onload = function() {
-			canvas = document.getElementById("canvas");
-			ctx = canvas.getContext("2d");
-			
-			// Add Event Listener		
-			document.addEventListener("keydown", keyDownEvent);
-			var x = 8;
-			setInterval(draw, 1000 / x);
-		};
+	window.onload = function() {
+		canvas = document.getElementById("canvas");
+		ctx = canvas.getContext("2d");
+		
+		// Add Event Listener		
+		document.addEventListener("keydown", keyDownEvent);
+		var x = 8;
 
+		// // Set Start Screen
+		// setInterval(startScreen, 1000 / x);
 
-		// set a score on the top right of screen
-		// function score() {
-		// 	var score = 0;
-		// 	ctx.font = "16px Arial";
-		// 	ctx.fillStyle = "#000000";
-		// 	ctx.fillText("Score: " + score, 8, 20);
+		// // Set Game Loop
+		// if (gameState == true) {
+		// 	setInterval(draw, 1000 / x);
 		// }
+		startScreen();
+		
+		var gameInterval;
+
+		function startGame() {
+			gameInterval = setInterval(draw, 1000 / x);
+		}
+	
+		// Input Functions
+		function keyDownEvent(e) {
+			if (e.keyCode == 32) {
+				if (!gameState)
+					gameState = true;
+					startGame();
+			} else {
+				switch (e.keyCode) {
+					case 37:
+						nextX = -1;
+						nextY = 0;
+						break;
+					case 38:
+						console.log
+						nextX = 0;
+						nextY = -1;
+						break;
+					case 39:
+						nextX = 1;
+						nextY = 0;
+						break;
+					case 40:
+						nextX = 0;
+						nextY = 1;
+						break;
+				}
+			}
+		}
+
+	};
 
 	
+	// Start Screen Function
+	function startScreen() {
+		ctx.fillStyle = 'white';
+		ctx.fillRect(0, 0, canvas.width, canvas.height);
+		ctx.font = "16px Arial";
+		ctx.fillStyle = "#000000";
+		ctx.fillText("Press Space to Start", 8, 20);
+	}
+	
+
+
+
 	// Draw Function
-		function draw() {
-			// move snake to next position
-			snakeX += nextX;
-			snakeY += nextY;
+	function draw() {
+
+
+		if (!gameState) {
+			startScreen();
+			return;
+		}
+		// move snake to next position
+		snakeX += nextX;
+		snakeY += nextY;
 		
-		// Snake over boundaries?	
+		// Handle Snake Collision with Wall
 		if (snakeX < 0) {
 			snakeX = gridSize -1;
 		}
@@ -73,24 +127,19 @@
 			snakeY = 0;
 		}
 		
-		
-		// Snake bite apple?
+		// Handle Snake Collision with Apple
 		if (snakeX == appleX && snakeY == appleY) {
 			tailSize++;
 			score++;
 			appleX = Math.floor(Math.random() * gridSize);
 			appleY = Math.floor(Math.random() * gridSize);
 		}
-		
-		// add death function next
-
-
 
 		// Setting Background Color
 		ctx.fillStyle = 'black';
 		ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-		// setting score board at top right of screen
+		// Score System
 		ctx.font = "16px Arial";
 		ctx.fillStyle = "#FFFFFF";
 		ctx.fillText("Score: " + score, 8, 20);
@@ -109,7 +158,6 @@
 		// Snake Interacts with own Tail?
 		if (snakeTrail[i].x == snakeX && snakeTrail[i].y == snakeY) {
 			tailSize = defaultTailSize;
-			score = 0;
 		}
 		}
 		
@@ -124,27 +172,7 @@
 			snakeTrail.shift();
 		}
 	}
-	// Input Functions
-			function keyDownEvent(e) {
-			switch (e.keyCode) {
-				case 37:
-					nextX = -1;
-					nextY = 0;
-					break;
-				case 38:
-					nextX = 0;
-					nextY = -1;
-					break;
-				case 39:
-					nextX = 1;
-					nextY = 0;
-					break;
-				case 40:
-					nextX = 0;
-					nextY = 1;
-					break;
-				}
-			}
+	
 // End of Functions
 </script>
 </body>
