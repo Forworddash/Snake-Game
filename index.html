@@ -40,24 +40,20 @@
 		
 		// Add Event Listener		
 		document.addEventListener("keydown", keyDownEvent);
+		
 		var x = 8;
 
-		// // Set Start Screen
-		// setInterval(startScreen, 1000 / x);
-
-		// // Set Game Loop
-		// if (gameState == true) {
-		// 	setInterval(draw, 1000 / x);
-		// }
+		// Call startScreen Function
 		startScreen();
 		
 		var gameInterval;
 
+		// Define Start Game Function
 		function startGame() {
 			gameInterval = setInterval(draw, 1000 / x);
 		}
 	
-		// Input Functions
+		// Input Function
 		function keyDownEvent(e) {
 			if (e.keyCode == 32) {
 				if (!gameState)
@@ -89,7 +85,7 @@
 	};
 
 	
-	// Start Screen Function
+	// Define Screen Function
 	function startScreen() {
 		ctx.fillStyle = 'white';
 		ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -101,9 +97,8 @@
 
 
 
-	// Draw Function
+	// Define Draw Function
 	function draw() {
-
 
 		if (!gameState) {
 			startScreen();
@@ -147,18 +142,20 @@
 		
 		// Setting Snakes Color
 		ctx.fillStyle = 'green';
+		
 		for (var i = 0; i < snakeTrail.length; i++) {
 			ctx.fillRect(
 				snakeTrail[i].x * tileSize,
 				snakeTrail[i].y * tileSize,
 				tileSize,
 				tileSize
-		);
+			);
 		
-		// Snake Interacts with own Tail?
-		if (snakeTrail[i].x == snakeX && snakeTrail[i].y == snakeY) {
-			tailSize = defaultTailSize;
-		}
+			// Snake interacts with its tail
+			if (snakeTrail[i].x == snakeX && snakeTrail[i].y == snakeY) {
+				tailSize = defaultTailSize;
+				score = 0;
+			}
 		}
 		
 		// Set Apple Color
