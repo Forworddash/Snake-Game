@@ -108,11 +108,13 @@
 
         // Define Game Over Function
         function gameOverScreen() {
-            ctx.fillStyle = 'white';
+            ctx.fillStyle = 'black';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             ctx.font = "16px Arial";
             ctx.fillStyle = "#FF0000";
-            ctx.fillText("Game Over! To play again press 1. To exit press 2", 8, 20);
+            ctx.fillText("Game Over!", 0, 20);
+            ctx.fillText("Press 1 to play again", 0, 40);
+            ctx.fillText("Press 2 to exit", 0, 60);
         }
 
         // Define Draw Function
