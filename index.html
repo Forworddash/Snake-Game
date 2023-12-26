@@ -32,6 +32,8 @@
 
 	// Game State
 	var gameState = false;
+	var snakeMoving = false;
+
 	
 	
 
@@ -81,6 +83,7 @@
 						nextY = 1;
 						break;
 				}
+				snakeMoving = true;
 			}
 		}
 
@@ -149,23 +152,30 @@
 		
 		// Setting Snakes Color
 		ctx.fillStyle = 'green';
-		
-		for (var i = 0; i < snakeTrail.length; i++) {
-			ctx.fillRect(
-				snakeTrail[i].x * tileSize,
-				snakeTrail[i].y * tileSize,
-				tileSize,
-				tileSize
-			);
-		
-			// Snake interacts with its tail
-			if (snakeTrail[i].x == snakeX && snakeTrail[i].y == snakeY) {
-				tailSize = defaultTailSize;
-				// score = 0;
-				// lives_remaining--;
-			}
+		if (snakeMoving) {
+			for (var i = 0; i < snakeTrail.length; i++) {
+				ctx.fillRect(
+					snakeTrail[i].x * tileSize,
+					snakeTrail[i].y * tileSize,
+					tileSize,
+					tileSize
+				);
+			
+				// Snake interacts with its tail
+				if (snakeTrail[i].x == snakeX && snakeTrail[i].y == snakeY) {
+					tailSize = defaultTailSize;
+					score = 0;
+					lives_remaining--;
+					snakeMoving = false;
+				}
 
+
+			}
 		}
+		// if (score == 0) {
+		// 	lives_remaining--;
+		// }
+
 
 		// Gameover when lives_remaining = 0
 		if (lives_remaining == 0) {
