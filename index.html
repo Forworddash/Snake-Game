@@ -99,10 +99,10 @@
 
         // Define Screen Function
         function startScreen() {
-            ctx.fillStyle = 'white';
+            ctx.fillStyle = 'black';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             ctx.font = "16px Arial";
-            ctx.fillStyle = "#000000";
+            ctx.fillStyle = "#FFFFFF";
             ctx.fillText("Press Space to Start", 8, 20);
         }
 
@@ -154,6 +154,10 @@
             ctx.fillStyle = 'black';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+			// Set Apple Color
+			ctx.fillStyle = 'red';
+            ctx.fillRect(appleX * tileSize, appleY * tileSize, tileSize, tileSize);
+
             // Score counter display
             ctx.font = "16px Arial";
             ctx.fillStyle = "#FFFFFF";
@@ -195,9 +199,7 @@
                 snakeMoving = false;
             }
 
-            // Set Apple Color
-            ctx.fillStyle = 'red';
-            ctx.fillRect(appleX * tileSize, appleY * tileSize, tileSize, tileSize);
+           
 
             // Set Snake Trail
             snakeTrail.push({
